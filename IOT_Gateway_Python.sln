@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "IOT_Gateway_Python", "IOT_Gateway_Python.pyproj", "{0E343DBC-68E7-4AD6-BE30-D27541D62B2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E343DBC-68E7-4AD6-BE30-D27541D62B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E343DBC-68E7-4AD6-BE30-D27541D62B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FC09740-0745-4DBB-91BE-0799A3C3134F}
+	EndGlobalSection
+EndGlobal
