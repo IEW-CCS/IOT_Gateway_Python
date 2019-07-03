@@ -1,0 +1,38 @@
+mqtt:
+  host: 172.20.10.5
+  port: 1883
+  username: 
+  password: 
+  topic_prefix:                  # All messages will have that prefix added, remove if you dont need this.
+  client_id: bt-mqtt-gateway     # if no setting will be use computer name
+  availability_topic: lwt_topic  # if offline auto send msg to this topic 
+
+manager:
+  topic_subscription:
+    update_all:
+      topic: homeassistant/status
+      payload: online
+  command_timeout: 35           # Timeout for worker operations. Can be removed if the default of 35 seconds is sufficient.
+  workers:
+#    blescanmulti:
+#      args:
+#        topic_prefix: blescan
+#        available_payload: home
+#        unavailable_payload: not_home
+#        available_timeout: 0
+#        unavailable_timeout: 60
+#        scan_timeout: 10
+#        scan_passive: true
+#      topic_subscription: IEW/BLE/+/Sensor1/+/+
+#      update_interval: 10
+    melsecplc:
+      args:
+        topic_prefix: melsecplc
+        available_payload: home
+        unavailable_payload: not_home
+        available_timeout: 0
+        unavailable_timeout: 60
+        scan_timeout: 10
+        scan_passive: true
+      topic_subscription: /IEW/gateway001/device001/+/+
+      update_interval: 10

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0e343dbc-68e7-4ad6-be30-d27541d62b2d}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>gateway.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="blenotify.py" />
+    <Compile Include="bleread.py" />
+    <Compile Include="bleread2.py" />
+    <Compile Include="config.py" />
+    <Compile Include="gateway.py" />
+    <Compile Include="HslCommunication.py" />
+    <Compile Include="logger.py" />
+    <Compile Include="MelsecMcNetTest.py" />
+    <Compile Include="mqtt.py" />
+    <Compile Include="utils.py" />
+    <Compile Include="workers\base.py" />
+    <Compile Include="workers\blescanmulti.py" />
+    <Compile Include="workers\linakdesk.py" />
+    <Compile Include="workers\melsecplc.py" />
+    <Compile Include="workers\miflora.py" />
+    <Compile Include="workers\miscale.py" />
+    <Compile Include="workers\mithermometer.py" />
+    <Compile Include="workers\myble.py" />
+    <Compile Include="workers\mysensors.py" />
+    <Compile Include="workers\switchbot.py" />
+    <Compile Include="workers\thermostat.py" />
+    <Compile Include="workers\toothbrush.py" />
+    <Compile Include="workers_manager.py" />
+    <Compile Include="workers_queue.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="workers" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
