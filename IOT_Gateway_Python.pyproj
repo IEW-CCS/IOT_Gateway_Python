@@ -45,7 +45,14 @@
     <Compile Include="workers_queue.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\" />
     <Folder Include="workers" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\config.yaml" />
+    <Content Include="config\datatags.yaml" />
+    <Content Include="config\logger.yaml" />
+    <Content Include="config\test.yaml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
