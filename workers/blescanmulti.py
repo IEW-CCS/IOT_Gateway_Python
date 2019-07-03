@@ -102,7 +102,7 @@ class BleDeviceStatus:
   def read_tags(self):
 
       
-    with open(os.path.join( "config","datatags.yaml"), "r") as f:
+    with open(os.path.join(sys.path[0], "config","datatags.yaml"), "r") as f:
       config = yaml.safe_load(f)
 
     print("BleDevicesStatus --> read_tags: config", config)

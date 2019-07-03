@@ -1,6 +1,8 @@
 import logging
 import logging.config
 import yaml
+import os
+import sys
 
 APP_ROOT = 'bt-mqtt-gw'
 SUPPRESSION_ENABLED = False
@@ -8,8 +10,7 @@ SUPPRESSION_ENABLED = False
 
 def setup():
    
-
-  with open( os.path.join( "config","logger.yaml"), 'rt') as f:
+  with open( os.path.join( sys.path[0],"config","logger.yaml"), 'rt') as f:
     config = yaml.safe_load(f.read())
     logging.config.dictConfig(config)
 

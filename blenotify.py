@@ -3,6 +3,7 @@
 
 import yaml
 import struct
+import sys
 from bluepy.btle import Peripheral, DefaultDelegate
 
 
@@ -16,7 +17,7 @@ class MyDelegate(DefaultDelegate):
 
 
        
-with open( os.path.join("config","test.yaml"), "r") as f:
+with open( os.path.join(sys.path[0],"config","test.yaml"), "r") as f:
   config = yaml.safe_load(f)
 
 info = config['devices']
