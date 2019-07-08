@@ -308,9 +308,7 @@ class MelsecplcWorker(BaseWorker):
       json_msg = json.dumps(ret_json)
       self.Job_queue.put([MqttMessage(topic=sendout_topic, payload=json_msg)])
       self.Status = "Down"
-      
-      
-      
+     
 
   def read_payload_cmd_readdata(self, device_name,  payload, topic):
    
