@@ -13,7 +13,7 @@ def setup():
   with open( os.path.join( sys.path[0],"config","logger.yaml"), 'rt') as f:
     config = yaml.safe_load(f.read())
     logging.config.dictConfig(config)
-    logging.getLogger('apscheduler.executors.default').setLevel(logging.DEBUG)
+    
 
 
 def get(name=None):

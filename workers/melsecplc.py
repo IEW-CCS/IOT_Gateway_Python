@@ -5,7 +5,7 @@ import yaml
 import binascii
 import datetime
 import os
-
+import logging
 
 
 from HslCommunication import MelsecMcNet
@@ -215,7 +215,9 @@ class MelsecplcWorker(BaseWorker):
     self._scheduler = BackgroundScheduler(timezone=utc)
     self._scheduler.add_job(self.Read_PLC_Data, 'interval', seconds=10, id=self.ReadData_job_id)
     self._scheduler.start()
-    
+
+    logging.getLogger('schedule').propagate = False
+
     self.Status = "Init"
     _LOGGER.info("MelsecplcWorker --> starts = " +  self.Status)  
     
@@ -374,7 +376,7 @@ class MelsecplcWorker(BaseWorker):
 
   def status_update(self):
       
-    _LOGGER.debug("MelsecplcWorker --> Heartbit Report")
+    _LOGGER.info("MelsecplcWorker --> Heartbit Report")
     now = datetime.datetime.now()
     
     sendout_topic =  self.HeartBeat_Topic.replace("{gateway}", self.gateway_id ).replace("{device}", self.device_name)
