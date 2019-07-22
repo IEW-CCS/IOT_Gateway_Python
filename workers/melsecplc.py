@@ -9,6 +9,7 @@ from HslCommunication import MelsecMcNet
 from HslCommunication import SoftBasic
 from mqtt import MqttMessage
 
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import utc
 
