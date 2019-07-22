@@ -216,7 +216,7 @@ class MelsecplcWorker(BaseWorker):
     self._scheduler.add_job(self.Read_PLC_Data, 'interval', seconds=10, id=self.ReadData_job_id)
     self._scheduler.start()
 
-    logging.getLogger('schedule').propagate = False
+    logging.getLogger('apscheduler.executors.default').propagate = False
 
     self.Status = "Init"
     _LOGGER.info("MelsecplcWorker --> starts = " +  self.Status)  
