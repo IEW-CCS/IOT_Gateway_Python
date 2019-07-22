@@ -264,6 +264,7 @@ class MelsecplcWorker(BaseWorker):
              status.set_status(status is not None)
              self.Job_queue.put([MqttMessage(topic=sendout_topic, payload=json_msg)])
        except:
+           print("Melsecplcworker Excepting")
            self.Status = "Down"
         
     else:
@@ -319,7 +320,7 @@ class MelsecplcWorker(BaseWorker):
       print("MelsecplcWorker --> read_payload_cmd_parameter: cmd_parameter = ", cmd_read)
       sendout_topic =  topic + "/Ack"
       
-      if cmd_read['Cmd_Type'] =="ReadData" :
+      if cmd_read['Cmd_Type'] =="Collect" :
           self.addr_array = cmd_read['Address_Info']
           interval = int(cmd_read['Report_Interval'])
       
@@ -376,9 +377,14 @@ class MelsecplcWorker(BaseWorker):
     HB_json = {}
     HB_json.update({'Version': self.Version})
     HB_json.update({'Status': self.Status})
-    HB_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")})
+    HB_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
     json_msg = json.dumps(HB_json)
-    ret = MqttMessage(topic=(sendout_topic), payload=(json_msg))
+    ret =[]
+
+    messages = []
+    messages.append(MqttMessage(topic = sendout_topic, payload = json_msg))
+
+    ret += messages
 
 #    self.count += 1
 #    print("MelsecplcWorker --> status_update enters count = ", self.count)

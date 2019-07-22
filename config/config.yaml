@@ -1,5 +1,5 @@
 mqtt:
-  host: 172.20.10.5
+  host: 172.20.10.9
   port: 1883
   username: 
   password: 
@@ -35,4 +35,4 @@ manager:
         scan_timeout: 10
         scan_passive: true
       topic_subscription: /IEW/gateway001/device001/+/+
-      update_interval: 10
+      update_interval: 60
