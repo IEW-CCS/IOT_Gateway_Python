@@ -3,7 +3,7 @@ disable_existing_loggers: True
 
 formatters:
   default:
-    format: '%(asctime)s %(message)s'
+    format: '%(asctime)s %(levelname)s %(name)s %(message)s'
     datefmt: '%X'
   minimal:
     format: '%(message)s'
@@ -19,11 +19,23 @@ handlers:
     class: logging.NullHandler
     formatter: debug
 
+  info_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: default
+    filename: C:\python_log\Trace.log
+    maxBytes: 5242880
+    backupCount: 10
+    encoding: utf8
+
+
+
 loggers:
-  bt-mqtt-gw:
+  gateway:
     level: INFO
   dummy_debug:
     handlers: [dummy_debug]
 
 root:
-  handlers: [console]
+  level: INFO
+  handlers: [console,info_file_handler]

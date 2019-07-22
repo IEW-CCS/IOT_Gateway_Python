@@ -1,5 +1,5 @@
 mqtt:
-  host: 172.20.10.9
+  host: 127.0.0.1
   port: 1883
   username: 
   password: 

@@ -5,6 +5,7 @@ import yaml
 import binascii
 import datetime
 
+
 from HslCommunication import MelsecMcNet
 from HslCommunication import SoftBasic
 from mqtt import MqttMessage
@@ -20,6 +21,7 @@ from workers.base import BaseWorker
 import logger
 
 _LOGGER = logger.get(__name__)
+
 
 KILL_ME = "kill"
 STOP_COLLECT = "stop"
@@ -195,22 +197,27 @@ class MelsecplcWorker(BaseWorker):
   ReadData_job_id = '{}_interval_job'.format("ReadData")
   gateway_id =""
   device_name=""
-  Version = "Ver1.0"
+  Version = "1.0"
   Status = "Init"
   
   Job_queue = queue(maxsize = 10)
+
+  _LOGGER.info("MelsecPLC Class Initial Funished")
+  _LOGGER.info("ReadData_Topic = "+ ReadData_Topic)
+  _LOGGER.info("HeartBeat_Topic = "+ HeartBeat_Topic)
+  _LOGGER.info("Version = "+Version )  
     
-  
-  
   def __init__(self, command_timeout, **kwargs):
-    print("MelsecplcWorker --> __init__  starts")
+  
     super(MelsecplcWorker, self).__init__(command_timeout, **kwargs)
     self._scheduler = BackgroundScheduler(timezone=utc)
     self._scheduler.add_job(self.Read_PLC_Data, 'interval', seconds=10, id=self.ReadData_job_id)
     self._scheduler.start()
+    
     self.Status = "Init"
+    _LOGGER.info("MelsecplcWorker --> starts = " +  self.Status)  
+    
    
-  
   def run(self, mqtt):
     
      while True:
@@ -222,25 +229,19 @@ class MelsecplcWorker(BaseWorker):
            mqtt.publish(SendOutMQTT)
              
              
-      
   def create_devices(self):
     if not self.start_to_collect:
       self.last_status = []
 
       for device_name, dev_info in self.devices.items():
-        print("MelsecplcWorker --> create_devices : device_name = ", device_name)
+        _LOGGER.info("MelsecplcWorker --> create_devices : device_name = " + device_name)
         for d in dev_info:
-          print("MelsecplcWorker --> create_devices : ip_addr = ", d['IP_ADDR'])
-          print("MelsecplcWorker --> create_devices : port_id = ", d['PORT_ID'])
+          _LOGGER.info("MelsecplcWorker --> create_devices : ip_addr = " + d['IP_ADDR'])
+          _LOGGER.info("MelsecplcWorker --> create_devices : port_id = " + d['PORT_ID'])
           self.last_status = [
             PLCDevice(self, d['IP_ADDR'], d['PORT_ID'], device_name)
           ]
           
-#          p = PLCDevice(self, d['IP_ADDR'], d['PORT_ID'])
-#          if p is not None:
-#            self.last_status = [p]
-#      
-#      print("MelsecplcWorker --> create_devices : self.last_status.count() = ", self.last_status.count())
       self.start_to_collect = True
 
   def set_stop_flag(self):
@@ -255,7 +256,8 @@ class MelsecplcWorker(BaseWorker):
        if self.count > 65535:
           self.count =1
         
-       print("MelsecplcWorker --> status_update enters count = ", self.count)
+       _LOGGER.debug("MelsecplcWorker --> status_update enters count = "+ self.count)
+
        sendout_topic =  self.ReadData_Topic.replace("{gateway}", self.gateway_id ).replace("{device}", self.device_name)
        self.Status = "Run"
        
@@ -269,7 +271,7 @@ class MelsecplcWorker(BaseWorker):
            self.Status = "Down"
         
     else:
-      print("MelsecplcWorker --> status_update: Waiting for Collect Command!")
+      _LOGGER.info("MelsecplcWorker --> status_update: Waiting for Collect Command!")
 
 
   def read_payload_cmd_start(self, device_name, payload, topic):
@@ -278,9 +280,9 @@ class MelsecplcWorker(BaseWorker):
       cmd_start = {}
       cmd_start = json.loads(payload)
         
-      print("MelsecplcWorker --> read_payload_cmd_start: payload = ", payload)
-      print("MelsecplcWorker --> read_payload_cmd_start: cmd_start = ", cmd_start)
-      print("MelsecplcWorker --> read_payload_cmd_start: cmd_start['Device_Info] = ", cmd_start['Device_Info'])
+      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: payload = "+ payload)
+      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: cmd_start = "+ cmd_start)
+      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: cmd_start['Device_Info] = "+ cmd_start['Device_Info'])
       sendout_topic =  topic + "/Ack"
       
       
@@ -318,7 +320,7 @@ class MelsecplcWorker(BaseWorker):
       cmd_read = {}
       cmd_read = json.loads(payload)
       
-      print("MelsecplcWorker --> read_payload_cmd_parameter: cmd_parameter = ", cmd_read)
+      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_parameter: cmd_parameter = "+ cmd_read)
       sendout_topic =  topic + "/Ack"
       
       if cmd_read['Cmd_Type'] =="Collect" :
@@ -357,7 +359,7 @@ class MelsecplcWorker(BaseWorker):
   def read_payload_parameter_request(self, device_name, payload):
     parameter_request = {}
     parameter_request = json.loads(payload)
-    print("MelsecplcWorker --> read_payload_parameter_request: parameter_request = ", parameter_request)
+    _LOGGER.info("MelsecplcWorker --> read_payload_parameter_request: parameter_request = "+ parameter_request)
 
   def cmd_stop(self, value):
     if value == KILL_ME:
@@ -370,7 +372,7 @@ class MelsecplcWorker(BaseWorker):
 
   def status_update(self):
       
-    print("MelsecplcWorker --> Heartbit Report ")
+    _LOGGER.debug("MelsecplcWorker --> Heartbit Report")
     now = datetime.datetime.now()
     
     sendout_topic =  self.HeartBeat_Topic.replace("{gateway}", self.gateway_id ).replace("{device}", self.device_name)
@@ -387,17 +389,6 @@ class MelsecplcWorker(BaseWorker):
 
     ret += messages
 
-#    self.count += 1
-#    print("MelsecplcWorker --> status_update enters count = ", self.count)
-#    sendout_topic =  self.ReadData_Topic.replace("{gateway}", self.gateway_id ).replace("{device}", self.device_name)
-#    if self.start_to_collect and self.flag_started:
-#      for status in self.last_status:
-#        json_msg = status.read_data(self.addr_array)
-#        status.set_status(status is not None)
-#        ret += status.generate_messages(sendout_topic, json_msg)
-#    else:
-#      print("MelsecplcWorker --> status_update: Waiting for Collect Command!")
-
     return ret
 
   def on_command(self, topic, value):
@@ -409,11 +400,11 @@ class MelsecplcWorker(BaseWorker):
 
     if cmd_type == "Cmd":
         
-      print("MelsecplcWorker --> on_command: topic = ", topic)
-      print("MelsecplcWorker --> on_command: gateway_id = ", gateway_id)
-      print("MelsecplcWorker --> on_command: device_name = ", device_name)
-      print("MelsecplcWorker --> on_command: cmd_type = ", cmd_type)
-      print("MelsecplcWorker --> on_command: cmd = ", cmd)
+      _LOGGER.info("MelsecplcWorker --> on_command: topic = "+ topic)
+      _LOGGER.info("MelsecplcWorker --> on_command: gateway_id = "+ gateway_id)
+      _LOGGER.info("MelsecplcWorker --> on_command: device_name = "+ device_name)
+      _LOGGER.info("MelsecplcWorker --> on_command: cmd_type = "+ cmd_type)
+      _LOGGER.info("MelsecplcWorker --> on_command: cmd = "+ cmd)
 
       if cmd == "Start":
         self.read_payload_cmd_start(device_name, value, topic)
