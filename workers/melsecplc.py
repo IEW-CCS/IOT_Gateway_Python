@@ -7,6 +7,7 @@ import datetime
 import os
 
 
+
 from HslCommunication import MelsecMcNet
 from HslCommunication import SoftBasic
 from mqtt import MqttMessage
@@ -382,9 +383,7 @@ class MelsecplcWorker(BaseWorker):
     HB_json.update({'Version': self.Version})
     HB_json.update({'Status': self.Status})
     HB_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
-    HB_json.update({'ProcrssID': os.getpid()})
     json_msg = json.dumps(HB_json)
-
     _LOGGER.debug("Heartbit Report : " + json_msg)
 
     ret =[]
@@ -417,7 +416,18 @@ class MelsecplcWorker(BaseWorker):
         self.read_payload_cmd_readdata(device_name, value, topic)
       elif cmd == "Stop":
         self.cmd_stop(value)
-        
+      elif cmd == "OTA":
+        OTA_json = {}
+        OTA_json.update({'Version': self.Version})
+        OTA_json.update({'Status': self.Status})
+        OTA_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
+        OTA_json.update({'ProcrssID': os.getpid()})
+        json_msg = json.dumps(OTA_json)
+        sendout_topic =  topic + "/Ack"
+        self.Job_queue.put([MqttMessage(topic=sendout_topic, payload=json_msg)])
+        time.sleep(5)
+        self.cmd_stop("kill")
+
     elif cmd_type == "Parameter":
       if cmd == "Request":
         self.read_payload_parameter_request(device_name, value)
