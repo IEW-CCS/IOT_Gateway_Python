@@ -4,6 +4,7 @@ import json
 import yaml
 import binascii
 import datetime
+import os
 
 
 from HslCommunication import MelsecMcNet
@@ -381,7 +382,11 @@ class MelsecplcWorker(BaseWorker):
     HB_json.update({'Version': self.Version})
     HB_json.update({'Status': self.Status})
     HB_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
+    HB_json.update({'ProcrssID': os.getpid()})
     json_msg = json.dumps(HB_json)
+
+    _LOGGER.debug("Heartbit Report : " + json_msg)
+
     ret =[]
 
     messages = []
