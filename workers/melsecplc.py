@@ -422,10 +422,12 @@ class MelsecplcWorker(BaseWorker):
         OTA_json = {}
         OTA_json.update({'Version': self.Version})
         OTA_json.update({'Status': self.Status})
-        OTA_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
+        OTA_json.update({'Datetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
         OTA_json.update({'ProcrssID': os.getpid()})
         json_msg = json.dumps(OTA_json)
-        sendout_topic =  topic + "/Ack"
+
+        str = "/IEW/{GateWayID}/OTA/Worker/Ack"
+        sendout_topic =  str.replace("{GateWayID}", gateway_id)
         self.Job_queue.put([MqttMessage(topic=sendout_topic, payload=json_msg)])
         time.sleep(5)
         self.cmd_stop("kill")
