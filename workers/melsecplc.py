@@ -197,8 +197,8 @@ class MelsecplcWorker(BaseWorker):
   ReadData_Topic = "/IEW/{gateway}/{device}/ReplyData"
   HeartBeat_Topic = "/IEW/{gateway}/{device}/Status/HeartBeat"
   ReadData_job_id = '{}_interval_job'.format("ReadData")
-  gateway_id =""
-  device_name=""
+  gateway_id ="gateway001"
+  device_name="device001"
   Version = "1.0"
   Status = "Init"
   
@@ -260,7 +260,7 @@ class MelsecplcWorker(BaseWorker):
        if self.count > 65535:
           self.count =1
         
-       _LOGGER.debug("MelsecplcWorker --> status_update enters count = "+ self.count)
+       #_LOGGER.debug("MelsecplcWorker --> status_update enters count = "+ self.count)
 
        sendout_topic =  self.ReadData_Topic.replace("{gateway}", self.gateway_id ).replace("{device}", self.device_name)
        self.Status = "Run"
@@ -285,8 +285,8 @@ class MelsecplcWorker(BaseWorker):
       cmd_start = json.loads(payload)
         
       _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: payload = "+ payload)
-      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: cmd_start = "+ cmd_start)
-      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: cmd_start['Device_Info] = "+ cmd_start['Device_Info'])
+     # _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: cmd_start = "+ cmd_start)
+     # _LOGGER.info("MelsecplcWorker --> read_payload_cmd_start: cmd_start['Device_Info] = "+ cmd_start['Device_Info'])
       sendout_topic =  topic + "/Ack"
       
       
@@ -324,7 +324,7 @@ class MelsecplcWorker(BaseWorker):
       cmd_read = {}
       cmd_read = json.loads(payload)
       
-      _LOGGER.info("MelsecplcWorker --> read_payload_cmd_parameter: cmd_parameter = "+ cmd_read)
+      #_LOGGER.info("MelsecplcWorker --> read_payload_cmd_parameter: cmd_parameter = "+ cmd_read)
       sendout_topic =  topic + "/Ack"
       
       if cmd_read['Cmd_Type'] =="Collect" :
@@ -422,12 +422,10 @@ class MelsecplcWorker(BaseWorker):
         OTA_json = {}
         OTA_json.update({'Version': self.Version})
         OTA_json.update({'Status': self.Status})
-        OTA_json.update({'Datetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
+        OTA_json.update({'HBDatetime': now.strftime("%Y%m%d%H%M%S%f")[:-3]})
         OTA_json.update({'ProcrssID': os.getpid()})
         json_msg = json.dumps(OTA_json)
-
-        str = "/IEW/{GateWayID}/OTA/Worker/Ack"
-        sendout_topic =  str.replace("{GateWayID}", gateway_id)
+        sendout_topic =  topic + "/Ack"
         self.Job_queue.put([MqttMessage(topic=sendout_topic, payload=json_msg)])
         time.sleep(5)
         self.cmd_stop("kill")
