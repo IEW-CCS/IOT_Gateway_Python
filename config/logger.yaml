@@ -23,7 +23,7 @@ handlers:
     class: logging.handlers.RotatingFileHandler
     level: INFO
     formatter: default
-    filename: /home/pi/IEW/Logger/Worker/Trace.log
+    filename: C:\Logs\Worker_Logs\Trace.log
     maxBytes: 5242880
     backupCount: 10
     encoding: utf8

@@ -49,9 +49,10 @@
     <Folder Include="workers" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\config.yaml" />
     <Content Include="config\datatags.yaml" />
     <Content Include="config\logger.yaml" />
+    <Content Include="config\manager.yaml" />
+    <Content Include="config\mqtt.yaml" />
     <Content Include="config\test.yaml" />
   </ItemGroup>
   <ItemGroup>
