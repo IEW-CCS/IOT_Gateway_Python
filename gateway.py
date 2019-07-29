@@ -15,6 +15,8 @@ import queue
 
 from workers_queue import _WORKERS_QUEUE
 from config import settings
+from config import mqtt_settings
+
 from mqtt import MqttClient
 from workers_manager import WorkersManager
 
@@ -38,7 +40,7 @@ logger.suppress_update_failures(parsed.suppress)
 
 _LOGGER.info('Starting')
 
-mqtt = MqttClient(settings['mqtt'])
+mqtt = MqttClient(mqtt_settings['mqtt'])
 manager = WorkersManager(settings['manager'])
 manager.register_workers().start(mqtt)
 

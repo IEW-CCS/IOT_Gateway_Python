@@ -1,12 +1,3 @@
-mqtt:
-  host: 192.168.43.42
-  port: 1883
-  username: 
-  password: 
-  topic_prefix:                  # All messages will have that prefix added, remove if you dont need this.
-  client_id: bt-mqtt-gateway     # if no setting will be use computer name
-  availability_topic: lwt_topic  # if offline auto send msg to this topic 
-
 manager:
   topic_subscription:
     update_all:
